@@ -11,7 +11,7 @@ public class Day02 : BaseDay
     public override ValueTask<string> Solve_1()
     {
         using var sr = new StreamReader(InputFilePath);
-        int total = 0;
+        var total = 0;
 
         while (sr.ReadLine() is string line)
         {
@@ -32,7 +32,7 @@ public class Day02 : BaseDay
     public override ValueTask<string> Solve_2()
     {
         using var sr = new StreamReader(InputFilePath);
-        int total = 0;
+        var total = 0;
 
         while (sr.ReadLine() is string line)
         {
