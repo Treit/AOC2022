@@ -96,7 +96,6 @@ public class Day03 : BaseDay
                     if (itemGroup[0][idx] && itemGroup[1][idx])
                     {
                         total += GetPriority(item);
-                        itemGroup[1][idx] = false;
                         break;
                     }
                 }
@@ -110,11 +109,6 @@ public class Day03 : BaseDay
 
     int GetPriority(char c)
     {
-        if (char.IsLower(c))
-        {
-            return c - 96;
-        }
-
-        return c - 38;
+        return char.IsLower(c) ? c - 96 : c - 38;
     }
 }
