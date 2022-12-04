@@ -41,9 +41,6 @@ public class Day03 : BaseDay
                 if (items[idx])
                 {
                     total += GetPriority(item);
-
-                    // Ensure we only consider the priority of a given item type once.
-                    items[idx] = false;
                     break;
                 }
             }
@@ -99,10 +96,6 @@ public class Day03 : BaseDay
                     if (itemGroup[0][idx] && itemGroup[1][idx])
                     {
                         total += GetPriority(item);
-
-                        // Ensure we only consider the priority of a given item type once.
-                        // Probalby unnecessary.
-                        itemGroup[0][idx] = false;
                         itemGroup[1][idx] = false;
                         break;
                     }
