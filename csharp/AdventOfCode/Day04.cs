@@ -20,8 +20,8 @@ public class Day04 : BaseDay
                 continue;
             }
 
-            (int start, int end) first = (int.Parse(m.Result("$1")), int.Parse(m.Result("$2")));
-            (int start, int end) second = (int.Parse(m.Result("$3")), int.Parse(m.Result("$4")));
+            (int Start, int End) first = (int.Parse(m.Result("$1")), int.Parse(m.Result("$2")));
+            (int Start, int End) second = (int.Parse(m.Result("$3")), int.Parse(m.Result("$4")));
 
             bool fullyContained = Contains(first, second) || Contains(second, first);
 
