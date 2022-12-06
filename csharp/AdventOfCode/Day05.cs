@@ -38,7 +38,7 @@ public class Day05 : BaseDay
 
         foreach (var mi in GetMoveInstructions())
         {
-            MoveItems(mi, stacks, true);
+            MoveItems(mi, stacks, together: true);
         }
 
         var sb = new StringBuilder();
@@ -50,6 +50,23 @@ public class Day05 : BaseDay
         PrintStacks(stacks);
 
         return ValueTask.FromResult(sb.ToString());
+    }
+
+    IEnumerable<MoveInstruction> GetMoveInstructions()
+    {
+        foreach (var line in Utilities.GetInput(this))
+        {
+            var m = Regex.Match(line, @"move (\d+) from (\d+) to (\d+)");
+            if (!m.Success)
+            {
+                continue;
+            }
+
+            yield return new MoveInstruction(
+                int.Parse(m.Result("$1")),
+                int.Parse(m.Result("$2")),
+                int.Parse(m.Result("$3")));
+        }
     }
 
     IList<ElfStack> GetStartingStacks()
@@ -97,7 +114,7 @@ public class Day05 : BaseDay
         return result;
     }
 
-    void MoveItems(MoveInstruction mi, IList<ElfStack> stacks, bool together = false)
+    static void MoveItems(MoveInstruction mi, IList<ElfStack> stacks, bool together = false)
     {
         int fromIndex = mi.Source - 1;
         int toIndex = mi.Dest - 1;
@@ -125,7 +142,20 @@ public class Day05 : BaseDay
         }
     }
 
-    void PrintStacks(IEnumerable<ElfStack> input)
+    static IList<ElfStack> CloneElfStacks(IEnumerable<ElfStack> source)
+    {
+        var result = new List<ElfStack>();
+
+        foreach (var stack in source)
+        {
+            var tmp = new ElfStack(stack.StackId, stack.Column, new Stack<char>(new Stack<char>(stack.Stack)));
+            result.Add(tmp);
+        }
+
+        return result;
+    }
+
+    static void PrintStacks(IEnumerable<ElfStack> input)
     {
         int level = 0;
 
@@ -154,35 +184,5 @@ public class Day05 : BaseDay
         }
 
         Console.WriteLine();
-    }
-
-    IEnumerable<MoveInstruction> GetMoveInstructions()
-    {
-        foreach (var line in Utilities.GetInput(this))
-        {
-            var m = Regex.Match(line, @"move (\d+) from (\d+) to (\d+)");
-            if (!m.Success)
-            {
-                continue;
-            }
-
-            yield return new MoveInstruction(
-                int.Parse(m.Result("$1")),
-                int.Parse(m.Result("$2")),
-                int.Parse(m.Result("$3")));
-        }
-    }
-
-    IList<ElfStack> CloneElfStacks(IEnumerable<ElfStack> source)
-    {
-        var result = new List<ElfStack>();
-
-        foreach (var stack in source)
-        {
-            var tmp = new ElfStack(stack.StackId, stack.Column, new Stack<char>(new Stack<char>(stack.Stack)));
-            result.Add(tmp);
-        }
-
-        return result;
     }
 }
