@@ -6,7 +6,7 @@ namespace AoC.Puzzles._2022.Puzzles;
 
 record File(string Name, int Size);
 
-record Directory(string Name, List<File> Files, List<Directory> Directories);
+record Directory(string Name, IList<File> Files, IList<Directory> Directories);
 
 record DirStat(Directory Directory, long TotalSize);
 
@@ -51,7 +51,7 @@ public class Day07 : IPuzzle<string[]>
         return answer.TotalSize.ToString();
     }
 
-    long TotalFileSize(Directory dir)
+    static long TotalFileSize(Directory dir)
     {
         var total = 0L;
 
@@ -68,7 +68,7 @@ public class Day07 : IPuzzle<string[]>
         return total;
     }
 
-    Directory BuildFileSystemHierarchy(string[] input)
+    static Directory BuildFileSystemHierarchy(string[] input)
     {
         var rootDir = new Directory("/", new List<File>(), new List<Directory>());
         var currentDir = rootDir;
@@ -124,7 +124,7 @@ public class Day07 : IPuzzle<string[]>
         return rootDir;
     }
 
-    List<DirStat> GetDirStats(Directory root)
+    static IList<DirStat> GetDirStats(Directory root)
     {
         var dirstats = new List<DirStat>();
         var dirs = new Stack<Directory>();
