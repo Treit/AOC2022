@@ -22,7 +22,7 @@ public class Day07 : IPuzzle<string[]>
     {
         var total = 0L;
         var root = BuildFileSystemHierarchy(input);
-        List<DirStat> dirstats = GetDirStats(root);
+        var dirstats = GetDirStats(root);
 
         foreach (var stat in dirstats)
         {
@@ -70,8 +70,8 @@ public class Day07 : IPuzzle<string[]>
 
     Directory BuildFileSystemHierarchy(string[] input)
     {
-        Directory rootDir = new Directory("/", new List<File>(), new List<Directory>());
-        Directory currentDir = rootDir;
+        var rootDir = new Directory("/", new List<File>(), new List<Directory>());
+        var currentDir = rootDir;
 
         var dirstack = new Stack<Directory>();
         dirstack.Push(currentDir);
@@ -92,7 +92,7 @@ public class Day07 : IPuzzle<string[]>
                         continue;
                     }
 
-                    var matchingDir = currentDir!.Directories.Where(x => x.Name == dirName).First();
+                    var matchingDir = currentDir!.Directories.First(x => x.Name == dirName);
 
                     dirstack.Push(currentDir!);
                     currentDir = matchingDir;
