@@ -61,6 +61,7 @@ public class Day08 : IPuzzle<string[]>
                 {
                     // Left edge.
                     _visibleTrees[(i, j)] = height;
+                    continue;
                 }
 
                 if (height > maxHeight)
@@ -86,6 +87,7 @@ public class Day08 : IPuzzle<string[]>
                 {
                     // Right edge.
                     _visibleTrees[(i, j)] = height;
+                    continue;
                 }
 
                 if (height > maxHeight)
@@ -111,6 +113,7 @@ public class Day08 : IPuzzle<string[]>
                 {
                     // Top edge.
                     _visibleTrees[(i, j)] = height;
+                    continue;
                 }
 
                 if (height > maxHeight)
@@ -136,6 +139,7 @@ public class Day08 : IPuzzle<string[]>
                 {
                     // Bottom edge.
                     _visibleTrees[(i, j)] = height;
+                    continue;
                 }
 
                 if (height > maxHeight)
