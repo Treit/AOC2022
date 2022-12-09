@@ -26,7 +26,6 @@ public class Day08 : IPuzzle<string[]>
         CountVisibleLeft(input);
         CountVisibleDown(input);
         CountVisibleUp(input);
-        CountVisibleDown(input);
 
         return _visibleTrees.Count.ToString();
     }
