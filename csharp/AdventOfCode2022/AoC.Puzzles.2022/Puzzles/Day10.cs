@@ -56,7 +56,7 @@ class ElfDisplay
 
     void UpdateDipaly()
     {
-        var pixel = '.';
+        var pixel = ' ';
 
         if (_currentPixel == X
             || _currentPixel == X + 1
@@ -70,7 +70,7 @@ class ElfDisplay
         if (_currentPixel == _screenBuffer.Length)
         {
             _currentPixel = 0;
-            Console.WriteLine(new string(_screenBuffer));
+            Console.WriteLine(new string(_screenBuffer).Replace(" ", "🎄").Replace("#", "🎅"));
         }
     }
 }
