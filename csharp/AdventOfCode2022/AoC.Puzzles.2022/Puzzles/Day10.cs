@@ -111,6 +111,7 @@ public class Day10 : IPuzzle<string[]>
 
     public string Part2(string[] input)
     {
+        // Read from the output of Part1.
         return "FZBPBFZF";
     }
 
