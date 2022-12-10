@@ -102,7 +102,6 @@ public class Day10 : IPuzzle<string[]>
             {
                 int val = int.Parse(instr.Substring(5));
                 cpu.AddX(val);
-
             }
         }
 
