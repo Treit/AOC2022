@@ -1,0 +1,7 @@
+{
+  "profiles": {
+    "AoC.Console": {
+      "commandName": "Project"
+    }
+  }
+}
