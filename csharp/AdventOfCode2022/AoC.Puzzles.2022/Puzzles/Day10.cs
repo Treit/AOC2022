@@ -1,8 +1,5 @@
 ﻿using AoC.Common.Attributes;
 using AoC.Common.Interfaces;
-using System.Runtime.ExceptionServices;
-using System.Runtime.Versioning;
-using System.Xml.Linq;
 
 namespace AoC.Puzzles._2022.Puzzles;
 
@@ -101,7 +98,7 @@ public class Day10 : IPuzzle<string[]>
                 cpu.Noop();
                 continue;
             }
-            else  if (instr.StartsWith("addx"))
+            else if (instr.StartsWith("addx"))
             {
                 int val = int.Parse(instr.Substring(5));
                 cpu.AddX(val);
