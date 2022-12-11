@@ -1,69 +1,73 @@
 ﻿using AoC.Common.Attributes;
 using AoC.Common.Interfaces;
 
-namespace AoC.Puzzles._2022.Puzzles;
+namespace AoC.Puzzles._2021.Puzzles;
 
-[Puzzle(2022, 1, "Calories")]
+[Puzzle(2021, 1, "Sonar Sweep")]
 public class Day01 : IPuzzle<string[]>
 {
     public string[] Parse(string inputText)
     {
-        var lines = inputText.Split(Environment.NewLine);
+        var lines = inputText.Split(Environment.NewLine).Where(x => !string.IsNullOrWhiteSpace(x)).ToArray();
         return lines;
     }
 
-    public string Part1(string[] lines)
+    public string Part1(string[] depths)
     {
+        var prev = -1;
+        var increasedCount = 0;
 
-        int max = 0;
-        int current = 0;
-
-        foreach (var line in lines)
+        foreach (var depth in depths)
         {
-            if (string.IsNullOrWhiteSpace(line))
+            var current = int.Parse(depth);
+            if (prev >= 0 && current > prev)
             {
-                if (current > max)
-                {
-                    max = current;
-                }
-
-                current = 0;
-                continue;
+                increasedCount++;
             }
 
-            current += int.Parse(line);
+            prev = current;
         }
 
-        return max.ToString();
+        return increasedCount.ToString();
     }
 
-    public string Part2(string[] lines)
+    public string Part2(string[] depths)
     {
-        var topThree = new PriorityQueue<int, int>();
-        int current = 0;
+        var prev = -1;
+        var increasedCount = 0;
+        int windowStart = 0;
 
-        foreach (var line in lines)
+        while (true)
         {
-            if (!string.IsNullOrWhiteSpace(line))
+            var window = depths.AsSpan(windowStart, 3);
+            var current = SumWindow(window);
+
+            if (prev >= 0 && current > prev)
             {
-                current += int.Parse(line);
-                continue;
+                increasedCount++;
             }
 
-            topThree.Enqueue(current, current);
-            current = 0;
+            prev = current;
+            windowStart += 1;
 
-            if (topThree.Count < 4)
+            if (windowStart + 1 >= depths.Length - 1)
             {
-                continue;
+                break;
             }
-
-            // Throw away the smallest.
-            _ = topThree.Dequeue();
         }
 
-        var total = (topThree.Dequeue() + topThree.Dequeue() + topThree.Dequeue());
+        return increasedCount.ToString();
+    }
 
-        return total.ToString();
+    int SumWindow(Span<string> window)
+    {
+        int total = 0;
+
+        foreach (var val in window)
+        {
+            total += int.Parse(val);
+        }
+
+        return total;
     }
 }

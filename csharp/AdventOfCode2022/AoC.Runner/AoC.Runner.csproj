@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\AoC.Common\AoC.Common.csproj" />
+    <ProjectReference Include="..\AoC.Puzzles.2021\AoC.Puzzles.2021.csproj" />
     <ProjectReference Include="..\AoC.Puzzles.2022\AoC.Puzzles.2022.csproj" />
   </ItemGroup>
 
