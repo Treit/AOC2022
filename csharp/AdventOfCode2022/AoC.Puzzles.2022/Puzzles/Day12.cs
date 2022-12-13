@@ -133,8 +133,6 @@ public class Day12 : IPuzzle<string[]>
             }
         }
 
-        var startNode = grid[0, 0];
-
         var inputCopy = input.ToArray();
         for (int i = 0; i < inputCopy.Length; i++)
         {
@@ -143,11 +141,6 @@ public class Day12 : IPuzzle<string[]>
             {
                 char label = input[i][j];
                 char current = inputCopy[i][j];
-
-                if (label == 'S')
-                {
-                    startNode = grid[i, j];
-                }
 
                 GraphNode? left = (j > 0 && HeightOk(inputCopy[i][j - 1], current)) ? grid[i, j - 1] : null;
                 GraphNode? right = (j < inputCopy[i].Length - 1 && HeightOk(inputCopy[i][j + 1], current)) ? grid[i, j + 1] : null;
