@@ -162,7 +162,6 @@ public class Day12 : IPuzzle<string[]>
 
     GraphNode Search(GraphNode root)
     {
-        using var sw = new StreamWriter(@"c:\temp\bar.txt");
         var explored = new HashSet<(int, int)>();
         var queue = new Queue<GraphNode>();
         explored.Add(root.Coords);
@@ -171,8 +170,6 @@ public class Day12 : IPuzzle<string[]>
         while (queue.Count > 0)
         {
             var v = queue.Dequeue();
-
-            sw.WriteLine(v.Coords);
 
             if (v.Label == 'E')
             {
