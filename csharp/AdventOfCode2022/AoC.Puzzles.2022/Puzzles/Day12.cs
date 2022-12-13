@@ -88,7 +88,6 @@ public class Day12 : IPuzzle<string[]>
 
         foreach (var startNode in startingNodes)
         {
-
             // Clear previously set parents.
             for (int i = 0; i < input.Length; i++)
             {
