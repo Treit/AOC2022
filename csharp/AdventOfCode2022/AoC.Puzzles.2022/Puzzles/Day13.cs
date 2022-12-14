@@ -1,20 +1,8 @@
 ﻿using AoC.Common.Attributes;
 using AoC.Common.Interfaces;
+using System.Security.AccessControl;
 
 namespace AoC.Puzzles._2022.Puzzles;
-
-public record PacketItem
-{
-    public PacketItem(int id)
-    {
-        Id = id;
-        List = new List<PacketItem>();
-        Values = new List<int>();
-    }
-    public int Id { get; init; }
-    public List<PacketItem> List { get; init; }
-    public List<int> Values { get; init; }
-}
 
 [Puzzle(2022, 13, "Distress Signal")]
 public class Day13 : IPuzzle<string[]>
@@ -41,7 +29,7 @@ public class Day13 : IPuzzle<string[]>
             var leftPacket = DecodePacket(left);
             var rightPacket = DecodePacket(right);
 
-            if (Compare(leftPacket, rightPacket) is true)
+            if (Compare(leftPacket, rightPacket) <= 0)
             {
                 goodIndexes.Add(i + 1);
             }
@@ -52,13 +40,41 @@ public class Day13 : IPuzzle<string[]>
 
     public string Part2(string[] input)
     {
-        return "";
+        var packets = new List<string>();
+
+        for (int i = 0; i < input.Length; i++)
+        {
+            var packetPair = input[i];
+            var loc = packetPair.IndexOf(Environment.NewLine);
+            var left = packetPair.Substring(0, loc);
+            var right = packetPair.Substring(loc + Environment.NewLine.Length);
+
+            packets.Add(left);
+            packets.Add(right);
+        }
+
+        packets.Add("[[2]]");
+        packets.Add("[[6]]");
+
+        packets = packets.OrderBy(x => x, Comparer<string>.Create((x, y) =>
+        {
+            return Compare(DecodePacket(x), DecodePacket(y));
+        })).ToList();
+
+        foreach (var  packet in packets)
+        {
+            Console.WriteLine(packet);
+        }
+
+        var idxA = packets.IndexOf("[[2]]") + 1;
+        var idxB = packets.IndexOf("[[6]]") + 1;
+
+        return (idxA * idxB).ToString();
     }
 
     public List<object> DecodePacket(string packet)
     {
         var result = new List<object>(); // :(
-        Console.WriteLine(packet);
         var listStack = new Stack<(int, List<object>)>();
         var listId = -1;
 
@@ -74,13 +90,7 @@ public class Day13 : IPuzzle<string[]>
 
                 if (currentList != null)
                 {
-                    Console.WriteLine($"Start list {listId}");
-                    Console.WriteLine($"Adding list {listId} to list {listId - 1}");
                     currentList.Add(newList);
-                }
-                else
-                {
-                    Console.WriteLine($"Start list {listId}");
                 }
 
                 currentList = newList;
@@ -93,7 +103,6 @@ public class Day13 : IPuzzle<string[]>
                 if (currentInt != "")
                 {
                     var val = int.Parse(currentInt);
-                    Console.WriteLine($"Adding {val} to list {listId}");
                     currentList!.Add(val);
                     currentInt = "";
                 }
@@ -103,8 +112,6 @@ public class Day13 : IPuzzle<string[]>
                     listStack.Pop();
                 }
 
-                Console.WriteLine($"End list {listId}");
-
                 (listId, currentList) = listStack.Peek();
             }
 
@@ -113,7 +120,6 @@ public class Day13 : IPuzzle<string[]>
                 if (currentInt != "")
                 {
                     var val = int.Parse(currentInt);
-                    Console.WriteLine($"Adding {val} to list {listId}");
                     currentList!.Add(val);
                     currentInt = "";
                 }
@@ -125,25 +131,23 @@ public class Day13 : IPuzzle<string[]>
             }
         }
 
-        Console.WriteLine("--------------------------------");
-
         return currentList!;
     }
 
-    bool? Compare(object left, object right)
+    int Compare(object left, object right)
     {
         if (left is int x && right is int y)
         {
             if (x < y)
             {
-                return true;
+                return -1;
             }
             else if (x > y)
             {
-                return false;
+                return 1;
             }
 
-            return null;
+            return 0;
         }
 
         if (left is List<object> ll && right is List<object> lr)
@@ -161,7 +165,7 @@ public class Day13 : IPuzzle<string[]>
             return CompareLists(ll2, ListFromInt(ir));
         }
 
-        return null;
+        return 0;
 
         List<object> ListFromInt(int x)
         {
@@ -171,110 +175,32 @@ public class Day13 : IPuzzle<string[]>
         }
     }
 
-    bool? CompareLists(List<object> leftPacket, List<object> rightPacket)
+    int CompareLists(List<object> leftPacket, List<object> rightPacket)
     {
-        if (leftPacket.Count == 0 || rightPacket.Count == 0)
-        {
-            if (leftPacket.Count > rightPacket.Count)
-            {
-                return false;
-            }
-
-            return true;
-        }
-
         for (int i = 0; i < leftPacket.Count; i++)
         {
+            if (i >= rightPacket.Count)
+            {
+                break;
+            }
+
             var tmp = Compare(leftPacket[i], rightPacket[i]);
 
-            if (tmp != null)
+            if (tmp != 0)
             {
                 return tmp;
             }
-
-            if (i + 1 == leftPacket.Count)
-            {
-                return true;
-            }
-            if (i + 1 == rightPacket.Count)
-            {
-                return false;
-            }
         }
 
-        return null;
-    }
-
-    public PacketItem DecodePacketOld(string packet)
-    {
-        Console.WriteLine(packet);
-        var listStack = new Stack<PacketItem>();
-        var lists = 0;
-
-        var currentInt = "";
-        PacketItem? currentList = null;
-
-        foreach (char c in packet)
+        if (leftPacket.Count < rightPacket.Count)
         {
-            if (c == '[')
-            {
-                var newList = new PacketItem(lists++);
-
-                if (currentList != null)
-                {
-                    Console.WriteLine($"Start list {newList.Id}");
-                    Console.WriteLine($"Adding list {newList.Id} to list {currentList.Id}");
-                    currentList.List.Add(newList);
-                }
-                else
-                {
-                    Console.WriteLine($"Start list {newList.Id}");
-                }
-
-                currentList = newList;
-
-                listStack.Push(currentList);
-            }
-
-            if (c == ']')
-            {
-                if (currentInt != "")
-                {
-                    var val = int.Parse(currentInt);
-                    Console.WriteLine($"Adding {val} to list {currentList!.Id}");
-                    currentList.Values.Add(val);
-                    currentInt = "";
-                }
-
-                if (listStack.Count > 1)
-                {
-                    listStack.Pop();
-                }
-
-                Console.WriteLine($"End list {currentList!.Id}");
-
-                currentList = listStack.Peek();
-            }
-
-            if (c == ',')
-            {
-                if (currentInt != "")
-                {
-                    var val = int.Parse(currentInt);
-                    Console.WriteLine($"Adding {val} to list {currentList!.Id}");
-                    currentList.Values.Add(val);
-                    currentInt = "";
-                }
-            }
-
-            if (char.IsDigit(c))
-            {
-                currentInt += c;
-            }
+            return -1;
+        }
+        else if (leftPacket.Count > rightPacket.Count)
+        {
+            return 1;
         }
 
-        Console.WriteLine("--------------------------------");
-
-        return currentList!;
+        return 0;
     }
 }
