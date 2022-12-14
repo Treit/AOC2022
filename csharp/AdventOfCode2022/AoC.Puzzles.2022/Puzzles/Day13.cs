@@ -170,15 +170,6 @@ public class Day13 : IPuzzle<string[]>
             }
         }
 
-        if (leftPacket.Count < rightPacket.Count)
-        {
-            return -1;
-        }
-        else if (leftPacket.Count > rightPacket.Count)
-        {
-            return 1;
-        }
-
-        return 0;
+        return leftPacket.Count.CompareTo(rightPacket.Count);
     }
 }
