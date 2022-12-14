@@ -136,36 +136,14 @@ public class Day13 : IPuzzle<string[]>
 
     int Compare(object left, object right)
     {
-        if (left is int x && right is int y)
+        return (left, right) switch
         {
-            if (x < y)
-            {
-                return -1;
-            }
-            else if (x > y)
-            {
-                return 1;
-            }
-
-            return 0;
-        }
-
-        if (left is List<object> ll && right is List<object> lr)
-        {
-            return CompareLists(ll, lr);
-        }
-
-        if (left is int il && right is List<object> lr2)
-        {
-            return CompareLists(ListFromInt(il), lr2);
-        }
-
-        if (left is List<object> ll2 && right is int ir)
-        {
-            return CompareLists(ll2, ListFromInt(ir));
-        }
-
-        return 0;
+            (int l, int r) => l.CompareTo(r),
+            (List<object> l, List<object> r) => CompareLists(l, r),
+            (List<object> l, int r) => CompareLists(l, ListFromInt(r)),
+            (int l, List<object> r) => CompareLists(ListFromInt(l), r),
+            _ => 0
+        };
 
         List<object> ListFromInt(int x)
         {
